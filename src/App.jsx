@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button"
+import Register from "./pages/Register"
 
-export default function Home() {
+const App = () => {
   return (
-    <div>
-      <Button>Click me</Button>
-    </div>
+    <>
+     <Register />
+    </>
   )
 }
+
+export default App
