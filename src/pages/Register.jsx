@@ -13,8 +13,10 @@ import { Label } from "@/components/ui/label";
 import HomeBg from "../assets/3350638.jpg";
 import { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigateTo = useNavigate();
   const [registerForm, setRegisterForm] = useState({
     userName: "",
     name: "",
@@ -95,6 +97,9 @@ const Register = () => {
 
       toast.dismiss(loadingToastId);
       toast.success("Account created successful!");
+      setTimeout(() => {
+        navigateTo("/");
+      }, 3000)
     } catch (error) {
       toast.dismiss(loadingToastId);
       toast.error(error.message || "Something went wrong. Please try again.");
@@ -133,6 +138,9 @@ const Register = () => {
 
       toast.dismiss(loadingToastId);
       toast.success("Login successful!");
+      setTimeout(() => {
+        navigateTo("/");
+      }, 3000)
     } catch (error) {
       toast.dismiss(loadingToastId);
       toast.error(error.message || "Something went wrong. Please try again.");
