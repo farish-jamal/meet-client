@@ -102,7 +102,7 @@ const Register = () => {
       }, 3000)
     } catch (error) {
       toast.dismiss(loadingToastId);
-      toast.error(error.message || "Something went wrong. Please try again.");
+      toast.error("Internal server error");
     }
   };
 
@@ -143,7 +143,7 @@ const Register = () => {
       }, 3000)
     } catch (error) {
       toast.dismiss(loadingToastId);
-      toast.error(error.message || "Something went wrong. Please try again.");
+      toast.error("Internal server error");
     }
   };
 
