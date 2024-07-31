@@ -6,7 +6,6 @@ import { Toaster, toast } from "react-hot-toast";
 
 const Feed = () => {
   const [posts, setPosts] = useState({});
-  const [user, setUser] = useState({});
 
   const handleGetPost = async () => {
     const token = localStorage.getItem('token');
@@ -31,7 +30,6 @@ const Feed = () => {
   };
   useEffect(() => {
     handleGetPost();
-    console.log(posts);
   }, [])
 
   return (
@@ -41,8 +39,8 @@ const Feed = () => {
         <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Feed</h2>
           {posts.map((post) => (
-            <div to={post.id} key={post.id} className="mb-5 bg-gray-100 p-5 rounded-lg">
-              <div className="flex items-center mb-2 mt-10">
+            <div to={post.id} key={post.id} className="mb-5 bg-stone-100 px-5 pb-5 pt-1 rounded-lg">
+              <div className="flex items-center mb-2 mt-5 pt-1">
                 <img
                   src={post.user[0].profile}
                   alt={post.user[0].userName}
@@ -59,7 +57,7 @@ const Feed = () => {
                   className="w-full h-96 rounded-lg mb-2"
                 />
               </Link>
-              <div className="flex justify-between items-center mb-5">
+              <div className="flex justify-between items-center mb-5 mt-5">
                 <div className="flex items-center">
                   <Heart className="mr-2 text-red-500 cursor-pointer" />
                   <span>12</span>
