@@ -6,7 +6,7 @@ import Protected from "./components/ProtectedRoute";
 const App = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Register />} />
+      <Route path="/login" element={<Protected element={<Register />} screen="login"/>} />
       <Route path="/" element={<Protected element={<Home />} />} />
     </Routes>
   );
