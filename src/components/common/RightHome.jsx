@@ -1,12 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const RightHome = () => {
+const RightHome = ({user}) => {
   return (
     <div className="sticky top-4 right-0 hidden lg:flex flex-col items-start lg:w-1/6 bg-white m-3 p-4 rounded-lg shadow-lg h-[97vh]">
       <div className="flex items-start gap-4 mb-6 w-full cursor-pointer">
         <Avatar className="relative w-12 h-12 rounded-full overflow-hidden">
           <AvatarImage
-            src="https://github.com/shadcn.png"
+            src={user.profile}
             alt="@shadcn"
             className="object-cover w-full h-full"
           />
@@ -15,8 +15,8 @@ const RightHome = () => {
           </AvatarFallback>
         </Avatar>
         <div>
-          <p className="text-sm">shutupfarish</p>
-          <p className="text-base font-semibold">Farish Jamal</p>
+          <p className="text-sm">{user.userName}</p>
+          <p className="text-base font-semibold">{user.name}</p>
         </div>
       </div>
       <div className="flex items-center justify-between w-full">

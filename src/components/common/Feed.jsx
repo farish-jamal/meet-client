@@ -42,8 +42,8 @@ const Feed = () => {
 
   return (
     <>
-      {data && data.length > 1 ? (
-        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-28 rounded-lg shadow-lg overflow-y-auto">
+      {data && data.length > 0 ? (
+        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-28 rounded-lg shadow-lg overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Feed</h2>
           {posts.map((post) => (
             <div to={post.id} key={post.id} className="mb-2">
@@ -82,7 +82,7 @@ const Feed = () => {
           ))}
         </div>
       ) : (
-        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-28 rounded-lg shadow-lg overflow-y-auto">
+        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-28 rounded-lg shadow-lg overflow-y-auto h-full">
           <h2 className="text-xl font-bold mb-4">Feed</h2>
           <div className="h-full overflow-y-auto">
             {[1, 2, 3].map((_, index) => (
