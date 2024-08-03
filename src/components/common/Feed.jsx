@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 
 const Feed = () => {
-  const [posts, setPosts] = useState({});
+  const [posts, setPosts] = useState([]);
 
   const handleGetPost = async () => {
     const token = localStorage.getItem('token');

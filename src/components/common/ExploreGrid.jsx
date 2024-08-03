@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 const ExploreGrid = () => {
- const [images, setImages] = useState({});
+ const [images, setImages] = useState([]);
 
  const handleGetImages = async () => {
   try {
@@ -50,8 +50,8 @@ const ExploreGrid = () => {
        ))
      ) : (
        [1, 2, 3, 4,5,6].map((_, index) => (
-         <div key={index} className="relative w-full sm:w-1/2 md:w-[46%] lg:w-[42%]">
-            <Skeleton className="h-[300px] w-[100%] rounded-xl" />
+         <div key={index} className="relative w-[46%] md:w-[48%] lg:w-[42%] p-2">
+            <Skeleton className="h-[150px] w-[100%] md:h-[300px] lg:h-[400px] rounded-xl" />
          </div>
        ))
      )}
