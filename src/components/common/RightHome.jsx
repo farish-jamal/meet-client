@@ -30,9 +30,35 @@ const RightHome = ({ user }) => {
     }
   };
 
+  const handleAddFriends = async (userId) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/user/addFriends`,
+        {
+          method: "POST",
+          body: JSON.stringify({ friendId: userId }),
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        toast.error("Can not add right now");
+        const ss = await response.json();
+        console.log(ss);
+        return;
+      }
+      toast.success("Added to friend list");
+      handleGetPeople();
+    } catch (error) {
+      toast.error("Internal server error");
+    }
+  }
+
   useEffect(() => {
     handleGetPeople();
-  }, []);
+  }, [people]);
   return (
     <>
       <Toaster position="top-right" duration="4000" />
@@ -79,7 +105,7 @@ const RightHome = ({ user }) => {
                   </Avatar>
                   <p className="text-sm font-semibold">{item.userName}</p>
                 </div>
-                <Button>Connect</Button>
+                <Button onClick={() => {handleAddFriends(item._id)}}>Connect</Button>
               </div>
             ))}
           <p className="text-blue-500">See All</p>
