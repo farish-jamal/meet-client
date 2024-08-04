@@ -24,6 +24,8 @@ const Feed = () => {
       }
       const postData = await response.json();
       setPosts(postData.data);
+
+    console.log(postData.data)
     } catch (error) {
       toast.error('Internal server error');
     }
@@ -36,18 +38,18 @@ const Feed = () => {
     <>
      <Toaster position="top-right" duration="4000" />
       {posts && posts.length > 0 ? (
-        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto">
+        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
           <h2 className="text-xl font-bold mb-4">Feed</h2>
           {posts.map((post) => (
             <div to={post.id} key={post.id} className="mb-5 bg-stone-100 px-5 pb-5 pt-1 rounded-lg">
               <div className="flex items-center mb-2 mt-5 pt-1">
                 <img
-                  src={post.user[0].profile}
-                  alt={post.user[0].userName}
+                  src={post.user.profile}
+                  alt={post.user.userName}
                   className="w-10 h-10 rounded-full mr-2 object-cover"
                 />
-                <Link to={`/profile/${post.user[0]._id}`}>
-                  <span className="font-bold">{post.user[0].userName}</span>
+                <Link to={`/profile/${post.user._id}`}>
+                  <span className="font-bold">{post.user.userName}</span>
                 </Link>
               </div>
               <Link to={`post/${post._id}`}>
@@ -70,18 +72,18 @@ const Feed = () => {
                 </div>
               </div>
               <p>
-                <span className="font-bold">{post.user[0].userName} </span>
+                <span className="font-bold">{post.user.userName} </span>
                 {post.caption}
               </p>
             </div>
           ))}
         </div>
       ) : (
-        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto h-full">
+        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto h-full no-scrollbar">
           <h2 className="text-xl font-bold mb-4">Feed</h2>
-          <div className="h-full overflow-y-auto">
+          <div className="h-full overflow-y-auto no-scrollbar">
             {[1, 2, 3].map((_, index) => (
-              <div key={index} className="mb-10">
+              <div key={index} className="mb-10 ">
                 <div className="flex items-center mb-2 space-x-4">
                   <Skeleton className="h-12 w-12 rounded-full" />
                   <div className="space-y-2">

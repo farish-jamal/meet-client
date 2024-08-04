@@ -22,7 +22,7 @@ const LeftHome = ({user}) => {
           <PlusSquare />
           <p className="text-xl font-semibold">Create</p>
         </Link>
-        <Link to="/profile" className="flex items-center gap-3 mb-6 w-full cursor-pointer hover:bg-blue-500 py-2 px-3 hover:text-white rounded-lg transition-all duration-200">
+        <Link to={`/profile/${user._id}`} className="flex items-center gap-3 mb-6 w-full cursor-pointer hover:bg-blue-500 py-2 px-3 hover:text-white rounded-lg transition-all duration-200">
           <Avatar>
             <AvatarImage src={user.profile} alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>

@@ -17,7 +17,7 @@ const App = () => {
       <Route path="/upload" element={<Protected element={<Create />} />} />
       <Route path="/explore" element={<Protected element={<Explore />} />} />
       <Route path="/notification" element={<Protected element={<Notification />} />} />
-      <Route path="/profile" element={<Protected element={<Profile />} />} />
+      <Route path="/profile/:id" element={<Protected element={<Profile />} />} />
       <Route path="/add" element={<Protected element={<AddPeople />} />} />
       <Route path="/post/:id" element={<Protected element={<SinglePost />} />} />
     </Routes>

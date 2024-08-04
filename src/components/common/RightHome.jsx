@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"
+import { Link } from "react-router-dom";
 
 const RightHome = ({ user }) => {
   const [people, setPeople] = useState([]);
@@ -45,8 +46,6 @@ const RightHome = ({ user }) => {
       );
       if (!response.ok) {
         toast.error("Can not add right now");
-        const ss = await response.json();
-        console.log(ss);
         return;
       }
       toast.success("Added to friend list");
@@ -92,6 +91,7 @@ const RightHome = ({ user }) => {
                 className="flex items-center justify-between w-full mb-4"
                 key={item._id}
               >
+                <Link to={`/profile/${item._id}`}>
                 <div className="flex items-center gap-3">
                   <Avatar className="relative w-8 h-8 rounded-full overflow-hidden">
                     <AvatarImage
@@ -105,6 +105,7 @@ const RightHome = ({ user }) => {
                   </Avatar>
                   <p className="text-sm font-semibold">{item.userName}</p>
                 </div>
+                </Link>
                 <Button onClick={() => {handleAddFriends(item._id)}}>Connect</Button>
               </div>
             ))}

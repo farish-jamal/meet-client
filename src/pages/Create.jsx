@@ -15,7 +15,7 @@ const Create = () => {
     getUserInfo();
   }, []);
   return (
-    <div className="relative flex flex-col lg:flex-row bg-gray-50">
+    <div className="relative flex flex-col lg:flex-row bg-gray-50 h-screen">
       <LeftHome user={user}/>
       <UploadGrid />
       <RightHome user={user}/>

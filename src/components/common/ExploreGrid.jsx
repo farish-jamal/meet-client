@@ -50,7 +50,7 @@ const ExploreGrid = () => {
        ))
      ) : (
        [1, 2, 3, 4,5,6].map((_, index) => (
-         <div key={index} className="relative w-[46%] md:w-[48%] lg:w-[42%] p-2">
+         <div key={index} className="relative w-[46%] md:w-[48%] lg:w-[42%] p-2 no-scrollbar">
             <Skeleton className="h-[150px] w-[100%] md:h-[300px] lg:h-[400px] rounded-xl" />
          </div>
        ))
