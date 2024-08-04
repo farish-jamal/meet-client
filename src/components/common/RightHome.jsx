@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton"
 
 const RightHome = ({ user }) => {
   const [people, setPeople] = useState([]);
@@ -58,7 +59,7 @@ const RightHome = ({ user }) => {
             See all
           </p>
         </div>
-        <div className="mt-6 w-full">
+        {people.length > 0 ? <div className="mt-6 w-full">
           {people &&
             people.map((item) => (
               <div
@@ -82,7 +83,15 @@ const RightHome = ({ user }) => {
               </div>
             ))}
           <p className="text-blue-500">See All</p>
-        </div>
+        </div> : <div className="mt-6 w-full">
+            {[1, 2, 3].map((_, index) => (
+              <div key={index} className="flex gap-5 items-center w-full mb-4">
+                  <Skeleton className="h-10 w-[15%] rounded-full" />
+                  <Skeleton className="h-5 w-[50%]" />
+                  <Skeleton className="h-10 w-[35%]" />
+              </div>
+            ))}
+          </div>}
       </div>
     </>
   );

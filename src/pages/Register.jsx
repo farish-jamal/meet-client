@@ -88,7 +88,6 @@ const Register = () => {
       if (!response.ok) {
         toast.dismiss(loadingToastId);
         toast.error("Something went wrong");
-        console.log(data);
         return;
       }
 
