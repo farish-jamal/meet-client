@@ -28,7 +28,6 @@ const UploadGrid = () => {
     formData.append("caption", caption);
     formData.append("image", image);
     formData.append("visibility", visibility);
-    console.log(formData);
     const loadingToastId = toast.loading("Uploading please wait...");
     const token = localStorage.getItem('token');
     try {

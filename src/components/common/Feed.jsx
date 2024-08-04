@@ -1,47 +1,84 @@
-import { Heart, MessageCircle, Share2, Bookmark } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton"
+import { Heart, MessageCircle, Share2, Bookmark, UserPlus } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleGetPost = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/user/feed`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/user/feed`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
-      });
-  
+      );
+
       if (!response.ok) {
-        toast.error('Error while fetching data');
+        toast.error("Error while fetching data");
         return;
       }
       const postData = await response.json();
       setPosts(postData.data);
-
-    console.log(postData.data)
+      setLoading(true);
     } catch (error) {
-      toast.error('Internal server error');
+      toast.error("Internal server error");
     }
   };
   useEffect(() => {
     handleGetPost();
-  }, [])
+  }, []);
 
   return (
     <>
-     <Toaster position="top-right" duration="4000" />
-      {posts && posts.length > 0 ? (
-        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
-          <h2 className="text-xl font-bold mb-4">Feed</h2>
+      <Toaster position="top-right" duration="4000" />
+      {!loading ? (
+        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
+          <div className="flex items-center justify-between py-2">
+            <h2 className="text-xl font-bold mb-4">Feed</h2>
+            <Link to="/add"><UserPlus className="block lg:hidden"/></Link>
+          </div>
+          <div className="h-full overflow-y-auto no-scrollbar">
+            {[1, 2, 3].map((_, index) => (
+              <div key={index} className="mb-10">
+                <div className="flex items-center mb-2 space-x-4">
+                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
+                <Skeleton className="w-full h-64 rounded-lg mb-2" />
+                <div className="flex items-center mb-2 space-x-4">
+                  <Skeleton className="h-6 w-6" />
+                  <Skeleton className="h-6 w-6" />
+                  <Skeleton className="h-6 w-6" />
+                  <Skeleton className="h-6 w-6" />
+                </div>
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : posts.length > 0 ? (
+        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
+          <div className="flex items-center justify-between py-2">
+            <h2 className="text-xl font-bold mb-4">Feed</h2>
+            <Link to="/add"><UserPlus className="block lg:hidden"/></Link>
+          </div>
           {posts.map((post) => (
-            <div to={post.id} key={post.id} className="mb-5 bg-stone-100 px-5 pb-5 pt-1 rounded-lg">
+            <div
+              key={post._id}
+              className="mb-5 bg-stone-100 px-5 pb-5 pt-1 rounded-lg"
+            >
               <div className="flex items-center mb-2 mt-5 pt-1">
                 <img
                   src={post.user.profile}
@@ -79,29 +116,12 @@ const Feed = () => {
           ))}
         </div>
       ) : (
-        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto h-full no-scrollbar">
-          <h2 className="text-xl font-bold mb-4">Feed</h2>
-          <div className="h-full overflow-y-auto no-scrollbar">
-            {[1, 2, 3].map((_, index) => (
-              <div key={index} className="mb-10 ">
-                <div className="flex items-center mb-2 space-x-4">
-                  <Skeleton className="h-12 w-12 rounded-full" />
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
-                  </div>
-                </div>
-                <Skeleton className="w-full h-64 rounded-lg mb-2" />
-                <div className="flex items-center mb-2 space-x-4">
-                  <Skeleton className="h-6 w-6" />
-                  <Skeleton className="h-6 w-6" />
-                  <Skeleton className="h-6 w-6" />
-                  <Skeleton className="h-6 w-6" />
-                </div>
-                <Skeleton className="h-4 w-3/4" />
-              </div>
-            ))}
+        <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 lg:px-60 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
+          <div className="flex items-center justify-between py-2">
+            <h2 className="text-xl font-bold mb-4">Feed</h2>
+            <Link to="/add"><UserPlus className="block lg:hidden"/></Link>
           </div>
+          <p>No posts to show</p>
         </div>
       )}
     </>

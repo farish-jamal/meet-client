@@ -18,8 +18,8 @@ const App = () => {
       <Route path="/explore" element={<Protected element={<Explore />} />} />
       <Route path="/notification" element={<Protected element={<Notification />} />} />
       <Route path="/profile/:id" element={<Protected element={<Profile />} />} />
-      <Route path="/add" element={<Protected element={<AddPeople />} />} />
       <Route path="/post/:id" element={<Protected element={<SinglePost />} />} />
+      <Route path="/add" element={<Protected element={<AddPeople />} />} />
     </Routes>
   );
 };

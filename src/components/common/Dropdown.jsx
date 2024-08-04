@@ -23,7 +23,6 @@ export function Dropdown() {
   useEffect(() => {
     const userObj = localStorage.getItem("user");
     const userDetail = JSON.parse(userObj);
-    console.log(userDetail);
     setUser(userDetail);
   }, []);
   return (

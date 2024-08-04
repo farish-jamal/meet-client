@@ -81,8 +81,6 @@ const Register = () => {
           body: formData,
         }
       );
-
-      console.log(response, registerForm);
       const { data } = await response.json();
 
       if (!response.ok) {
