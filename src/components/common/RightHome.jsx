@@ -57,6 +57,7 @@ const RightHome = ({ user }) => {
 
   useEffect(() => {
     handleGetPeople();
+    console.log('dsgdshgdjgdfsh')
   }, [people]);
   return (
     <>

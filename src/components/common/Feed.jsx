@@ -61,7 +61,6 @@ const Feed = () => {
 
   useEffect(() => {
     handleGetPost();
-    console.log(posts);
   }, []);
 
   return (

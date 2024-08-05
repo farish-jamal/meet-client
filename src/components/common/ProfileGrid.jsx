@@ -42,12 +42,64 @@ const ProfileGrid = () => {
     }
   };
 
+  const handleGetMyProfile = async () => {
+    const id = userDetail._id;
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/user/profile/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        toast.error("Error while fetching data");
+        return;
+      }
+      const data = await response.json();
+      console.log(data.data.user);
+      localStorage.setItem("user", JSON.stringify(data.data.user));
+      handleGetUserDeatail();
+    } catch (error) {
+      toast.error("Internal server error");
+      console.log(error);
+    }
+  }
+
+  const handleAddFriends = async (userId) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/user/addFriends`,
+        {
+          method: "POST",
+          body: JSON.stringify({ friendId: userId }),
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        toast.error("Can not add right now");
+        return;
+      }
+      toast.success("Added to friend list");
+      handleGetUser();
+      handleGetMyProfile();
+    } catch (error) {
+      toast.error("Internal server error");
+    }
+  }
+
   useEffect(() => {
     handleGetUser();
     handleGetUserDeatail();
-  }, [id]);
+  }, [id, user]);
   return (
-    <div className="flex-1 h-screen lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-5 rounded-lg shadow-lg overflow-y-auto">
+    <div className="flex-1 h-screen lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-5 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
       {!loading ? (
         <>
           <div className="flex items-center justify-between mb-6">
@@ -98,7 +150,7 @@ const ProfileGrid = () => {
                 </div>
               </div>
               {user.user._id !== userDetail._id && (
-                <Button>
+                <Button onClick={()=> handleAddFriends(user.user._id)}>
                   {userDetail.friendList &&
                   userDetail.friendList.some(
                     (friendId) => friendId === user.user._id
