@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Heart, MessageCircle, Share } from "lucide-react";
+import { EarthIcon, Heart, MessageCircle, Share, Users } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -51,6 +51,31 @@ const SinglePost = () => {
     }
   };
 
+  const handleDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+  
+    const units = [
+      { name: "year", seconds: 31536000 },
+      { name: "month", seconds: 2592000 },
+      { name: "week", seconds: 604800 },
+      { name: "day", seconds: 86400 },
+      { name: "hour", seconds: 3600 },
+      { name: "minute", seconds: 60 },
+      { name: "second", seconds: 1 },
+    ];
+  
+    for (const unit of units) {
+      const interval = Math.floor(diffInSeconds / unit.seconds);
+      if (interval >= 1) {
+        return `${interval} ${unit.name}${interval !== 1 ? "s" : ""} ago`;
+      }
+    }
+  
+    return "just now";
+    }
+
   useState(() => {
     handleGetPost();
   }, []);
@@ -62,7 +87,7 @@ const SinglePost = () => {
           <div className="flex items-center p-4 border-b border-gray-300">
             <Avatar className="w-14 h-14 rounded-full overflow-hidden">
               <AvatarImage
-                src={post.image}
+                src={post.user.profile}
                 alt={post._id}
                 className="object-cover w-full h-full"
               />
@@ -73,12 +98,13 @@ const SinglePost = () => {
               )}
             </Avatar>
             {post.user && (
-              <div className="ml-4">
+              <div className="ml-4 mr-3">
                 <p className="text-xl font-semibold text-gray-800">
                   {post.user.userName}
                 </p>
               </div>
             )}
+            {post.visibility === 'public' ? <EarthIcon width={18}/> : <Users width={18}/>}
           </div>
           <div className="relative">
             <img
@@ -102,7 +128,8 @@ const SinglePost = () => {
           </div>
           <div className="p-4 ">
             <p className="font-semibold text-lg text-gray-800">12 likes</p>
-            <p className="text-gray-700 mt-2">{post.caption}</p>
+            <p className="text-gray-700 mt-2"><span className="font-bold text-gray-950">{post.user.userName}</span>{" "}{post.caption}</p>
+            <p className="text-gray-500 mt-2">Posted {" "}{handleDate(post.createdAt)}</p>
             <p className="text-gray-500 mt-2">10 comments</p>
           </div>
           <div className="p-4">

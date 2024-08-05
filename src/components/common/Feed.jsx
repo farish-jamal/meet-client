@@ -1,4 +1,4 @@
-import { Heart, MessageCircle, Share2, Bookmark, UserPlus } from "lucide-react";
+import { Heart, MessageCircle, Share2, Bookmark, UserPlus, EarthIcon, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -33,8 +33,35 @@ const Feed = () => {
       toast.error("Internal server error");
     }
   };
+
+  const handleDate = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  const units = [
+    { name: "year", seconds: 31536000 },
+    { name: "month", seconds: 2592000 },
+    { name: "week", seconds: 604800 },
+    { name: "day", seconds: 86400 },
+    { name: "hour", seconds: 3600 },
+    { name: "minute", seconds: 60 },
+    { name: "second", seconds: 1 },
+  ];
+
+  for (const unit of units) {
+    const interval = Math.floor(diffInSeconds / unit.seconds);
+    if (interval >= 1) {
+      return `${interval} ${unit.name}${interval !== 1 ? "s" : ""} ago`;
+    }
+  }
+
+  return "just now";
+  }
+
   useEffect(() => {
     handleGetPost();
+    console.log(posts);
   }, []);
 
   return (
@@ -86,8 +113,9 @@ const Feed = () => {
                   className="w-10 h-10 rounded-full mr-2 object-cover"
                 />
                 <Link to={`/profile/${post.user._id}`}>
-                  <span className="font-bold">{post.user.userName}</span>
+                  <span className="font-bold mr-3">{post.user.userName}</span>
                 </Link>
+                {post.visibility === 'public' ? <EarthIcon width={18}/> : <Users width={18}/>}
               </div>
               <Link to={`post/${post._id}`}>
                 <img
@@ -112,6 +140,7 @@ const Feed = () => {
                 <span className="font-bold">{post.user.userName} </span>
                 {post.caption}
               </p>
+              <p className="text-gray-500 mt-2">Posted {" "}{handleDate(post.createdAt)}</p>
             </div>
           ))}
         </div>

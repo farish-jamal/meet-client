@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Link, useParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import DropDown from "./DropDown";
 
 const ProfileGrid = () => {
   const [user, setUser] = useState([]);
@@ -115,9 +116,7 @@ const ProfileGrid = () => {
                 <p className="text-gray-600">Posts</p>
               </div>
               <div>
-                <span className="font-semibold text-lg">
-                  {user.user.friendList.length}
-                </span>
+                <DropDown friend={user.user.friendList.length} id={user.user._id} /> 
                 <p className="text-gray-600">Connection</p>
               </div>
               <div>
