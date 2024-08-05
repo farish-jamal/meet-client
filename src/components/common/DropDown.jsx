@@ -6,7 +6,6 @@ import {
 import FriendList from "./FriendList";
 
 const DropDown = ({friend, id}) => {
- console.log(id);
   return (
     <Drawer>
       <DrawerTrigger asChild>
