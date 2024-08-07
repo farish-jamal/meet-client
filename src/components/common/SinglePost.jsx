@@ -51,11 +51,34 @@ const SinglePost = () => {
     }
   };
 
+  const handleLike = async (postId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/user/like/${postId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        toast.error("Already liked");
+        return;
+      }
+      handleGetPost();
+    } catch (error) {
+      toast.error("Internal server error");
+    }
+  }
+
   const handleDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInSeconds = Math.floor((now - date) / 1000);
-  
+
     const units = [
       { name: "year", seconds: 31536000 },
       { name: "month", seconds: 2592000 },
@@ -65,16 +88,16 @@ const SinglePost = () => {
       { name: "minute", seconds: 60 },
       { name: "second", seconds: 1 },
     ];
-  
+
     for (const unit of units) {
       const interval = Math.floor(diffInSeconds / unit.seconds);
-      if (interval >= 1) {
+       if (interval >= 1) {
         return `${interval} ${unit.name}${interval !== 1 ? "s" : ""} ago`;
       }
     }
-  
+
     return "just now";
-    }
+  };
 
   useState(() => {
     handleGetPost();
@@ -104,7 +127,11 @@ const SinglePost = () => {
                 </p>
               </div>
             )}
-            {post.visibility === 'public' ? <EarthIcon width={18}/> : <Users width={18}/>}
+            {post.visibility === "public" ? (
+              <EarthIcon width={18} />
+            ) : (
+              <Users width={18} />
+            )}
           </div>
           <div className="relative">
             <img
@@ -116,7 +143,7 @@ const SinglePost = () => {
           <div className="flex items-center p-4 border-b border-gray-300">
             <div className="flex items-center space-x-4">
               <button className="p-2 rounded-full hover:bg-gray-100 transition">
-                <Heart className="w-7 h-7 text-red-500" />
+                <Heart onClick={() => handleLike(post._id)} className="w-7 h-7 text-red-500" />
               </button>
               <button className="p-2 rounded-full hover:bg-gray-100 transition">
                 <MessageCircle className="w-7 h-7 text-gray-700" />
@@ -127,10 +154,21 @@ const SinglePost = () => {
             </div>
           </div>
           <div className="p-4 ">
-            <p className="font-semibold text-lg text-gray-800">12 likes</p>
-            <p className="text-gray-700 mt-2"><span className="font-bold text-gray-950">{post.user.userName}</span>{" "}{post.caption}</p>
-            <p className="text-gray-500 mt-2">Posted {" "}{handleDate(post.createdAt)}</p>
-            <p className="text-gray-500 mt-2">10 comments</p>
+            <p className="font-semibold text-lg text-gray-800">
+              {post.likeCount} likes
+            </p>
+            <p className="text-gray-700 mt-2">
+              <span className="font-bold text-gray-950">
+                {post.user.userName}
+              </span>{" "}
+              {post.caption}
+            </p>
+            <p className="text-gray-500 mt-2">
+              Posted {handleDate(post.createdAt)}
+            </p>
+            <p className="text-gray-500 mt-2">
+              {post.comments.length} comments
+            </p>
           </div>
           <div className="p-4">
             <div className="flex items-center overflow-hidden border-b border-gray-300 pb-6">

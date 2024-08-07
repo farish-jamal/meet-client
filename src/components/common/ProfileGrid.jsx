@@ -9,12 +9,24 @@ const ProfileGrid = () => {
   const [user, setUser] = useState([]);
   const [userDetail, setUserDetail] = useState({});
   const [loading, setLoading] = useState(false);
+  const [likes, setLikes] = useState(0);
   const { id } = useParams();
 
   const handleGetUserDeatail = () => {
     const userObj = localStorage.getItem("user");
     const localUser = JSON.parse(userObj);
     setUserDetail(localUser);
+  };
+
+  const handleAllLikes = () => {
+    if (user && user.posts && Array.isArray(user.posts)) {
+      const sum = user.posts.reduce((accumulator, item) => {
+        return accumulator + (item.likeCount || 0);
+      }, 0);
+      setLikes(sum);
+    } else {
+      console.error("User posts are not an array or are undefined");
+    }
   };
 
   const handleGetUser = async () => {
@@ -35,6 +47,7 @@ const ProfileGrid = () => {
       }
       const userData = await response.json();
       setUser(userData.data);
+      handleAllLikes();
       setLoading(true);
     } catch (error) {
       toast.error("Internal server error");
@@ -43,10 +56,10 @@ const ProfileGrid = () => {
   };
 
   const handleGetMyProfile = async () => {
-    const id = userDetail._id;
+    const uId = userDetail._id;
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/user/profile/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/user/profile/${uId}`,
         {
           method: "GET",
           headers: {
@@ -60,9 +73,8 @@ const ProfileGrid = () => {
         return;
       }
       const data = await response.json();
-      console.log(data.data.user);
       localStorage.setItem("user", JSON.stringify(data.data.user));
-      handleGetUserDeatail();
+      return true;
     } catch (error) {
       toast.error("Internal server error");
       console.log(error);
@@ -87,8 +99,9 @@ const ProfileGrid = () => {
         return;
       }
       toast.success("Added to friend list");
-      handleGetUser();
-      handleGetMyProfile();
+      await handleGetMyProfile();
+      await handleGetUser();
+      handleGetUserDeatail();
     } catch (error) {
       toast.error("Internal server error");
     }
@@ -97,7 +110,7 @@ const ProfileGrid = () => {
   useEffect(() => {
     handleGetUser();
     handleGetUserDeatail();
-  }, [id, user]);
+  }, [id]);
   return (
     <div className="flex-1 h-screen lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-5 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
       {!loading ? (
@@ -172,7 +185,7 @@ const ProfileGrid = () => {
                 <p className="text-gray-600">Connection</p>
               </div>
               <div>
-                <span className="font-semibold text-lg">100</span>
+                <span className="font-semibold text-lg">{likes}</span>
                 <p className="text-gray-600">Likes</p>
               </div>
             </div>

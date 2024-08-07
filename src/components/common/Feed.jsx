@@ -28,11 +28,35 @@ const Feed = () => {
       }
       const postData = await response.json();
       setPosts(postData.data);
+      console.log(postData.data);
       setLoading(true);
     } catch (error) {
       toast.error("Internal server error");
     }
   };
+
+  const handleLike = async (postId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/user/like/${postId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        toast.error("Already liked");
+        return;
+      }
+      handleGetPost();
+    } catch (error) {
+      toast.error("Internal server error");
+    }
+  }
 
   const handleDate = (dateString) => {
   const date = new Date(dateString);
@@ -125,12 +149,12 @@ const Feed = () => {
               </Link>
               <div className="flex justify-between items-center mb-5 mt-5">
                 <div className="flex items-center">
-                  <Heart className="mr-2 text-red-500 cursor-pointer" />
-                  <span>12</span>
+                  <Heart onClick={()=> handleLike(post._id)} className="mr-2 text-red-500 cursor-pointer" />
+                  <span>{post.likeCount}</span>
                   <Link to={`post/${post._id}`}>
                     <MessageCircle className="ml-4 mr-2 cursor-pointer" />
                   </Link>
-                  <span>55</span>
+                  <span>{post.comments.length}</span>
                   <Share2 className="ml-4 mr-2 cursor-pointer" />
                   <Bookmark className="ml-4 cursor-pointer" />
                 </div>
