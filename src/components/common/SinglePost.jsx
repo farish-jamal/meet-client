@@ -7,11 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const SinglePost = () => {
   const [post, setPost] = useState([]);
-  const [comments, setComments] = useState([
-    { userName: "johndoe", text: "Amazing post! Love the view!" },
-    { userName: "janedoe", text: "Wow, this place looks beautiful." },
-    { userName: "user123", text: "Can you share the location of this place?" },
-  ]);
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
   const { id } = useParams();
@@ -20,12 +16,34 @@ const SinglePost = () => {
     setNewComment(e.target.value);
   };
 
-  const handleCommentSubmit = () => {
-    if (newComment.trim()) {
-      setComments([...comments, { userName: "currentuser", text: newComment }]);
-      setNewComment("");
+  const handleCommentSubmit = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/user/comment/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ comment: newComment }),
+        }
+      );
+      if (!response.ok) {
+        toast.error("Error while fetching data");
+        return;
+      }
+      toast.success('Comment posted')
+      if (newComment.trim()) {
+        setComments([...comments, { userName: "currentuser", text: newComment }]);
+        setNewComment("");
+      }
+      handleGetPost();
+    } catch (error) {
+      toast.error("Internal server error");
+      console.log(error);
     }
-  };
+  }
 
   const handleGetPost = async () => {
     try {
@@ -105,12 +123,12 @@ const SinglePost = () => {
 
   return (
     <>
-      {post.caption ? (
+      {post && post.caption ? (
         <div className="flex-1 lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-5 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
           <div className="flex items-center p-4 border-b border-gray-300">
             <Avatar className="w-14 h-14 rounded-full overflow-hidden">
               <AvatarImage
-                src={post.user.profile}
+                src={post.profile}
                 alt={post._id}
                 className="object-cover w-full h-full"
               />
@@ -120,10 +138,10 @@ const SinglePost = () => {
                 </AvatarFallback>
               )}
             </Avatar>
-            {post.user && (
+            {post && (
               <div className="ml-4 mr-3">
                 <p className="text-xl font-semibold text-gray-800">
-                  {post.user.userName}
+                  {post.userName}
                 </p>
               </div>
             )}
@@ -159,7 +177,7 @@ const SinglePost = () => {
             </p>
             <p className="text-gray-700 mt-2">
               <span className="font-bold text-gray-950">
-                {post.user.userName}
+                {post.userName}
               </span>{" "}
               {post.caption}
             </p>
@@ -192,18 +210,18 @@ const SinglePost = () => {
               </button>
             </div>
             <div className="space-y-4 pt-6">
-              {comments.map((comment, index) => (
+              {post && post.commentWithUser.map((comment, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <Avatar className="w-10 h-10 rounded-full overflow-hidden">
                     <AvatarFallback className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-700">
-                      {comment.userName[0].toUpperCase()}
+                      {comment.user.userName[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="font-semibold text-gray-800">
-                      {comment.userName}
+                      {comment.user.userName}
                     </p>
-                    <p className="text-gray-700">{comment.text}</p>
+                    <p className="text-gray-700">{comment.comment}</p>
                   </div>
                 </div>
               ))}
