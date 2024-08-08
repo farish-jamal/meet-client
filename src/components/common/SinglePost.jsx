@@ -69,11 +69,12 @@ const SinglePost = () => {
     }
   };
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postUId) => {
+    console.log(postUId);
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/user/like/${postId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/user/like/${postUId}`,
         {
           method: "GET",
           headers: {
@@ -119,6 +120,7 @@ const SinglePost = () => {
 
   useState(() => {
     handleGetPost();
+    console.log(post)
   }, []);
 
   return (
@@ -161,7 +163,7 @@ const SinglePost = () => {
           <div className="flex items-center p-4 border-b border-gray-300">
             <div className="flex items-center space-x-4">
               <button className="p-2 rounded-full hover:bg-gray-100 transition">
-                <Heart onClick={() => handleLike(post._id)} className="w-7 h-7 text-red-500" />
+                <Heart onClick={() => handleLike(id)} className="w-7 h-7 text-red-500" />
               </button>
               <button className="p-2 rounded-full hover:bg-gray-100 transition">
                 <MessageCircle className="w-7 h-7 text-gray-700" />
