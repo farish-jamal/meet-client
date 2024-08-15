@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRecoilValue } from "recoil";
+import { userSelectorState } from "../../store/selector/userSelctor";
 // import { handleDate } from "../../functions/dateFormat";
 
 const SinglePost = () => {
   const [post, setPost] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [handleUserAction, setHandleUserAction] = useState(false);
+  const user = useRecoilValue(userSelectorState);
 
   const { id } = useParams();
 
@@ -34,14 +37,14 @@ const SinglePost = () => {
         toast.error("Error while fetching data");
         return;
       }
-      toast.success('Comment posted')
+      toast.success("Comment posted");
       setNewComment("");
       setHandleUserAction(!handleUserAction);
     } catch (error) {
       toast.error("Internal server error");
       console.log(error);
     }
-  }
+  };
 
   const handleGetPost = async () => {
     try {
@@ -89,7 +92,7 @@ const SinglePost = () => {
     } catch (error) {
       toast.error("Internal server error");
     }
-  }
+  };
 
   useEffect(() => {
     handleGetPost();
@@ -135,7 +138,10 @@ const SinglePost = () => {
           <div className="flex items-center p-4 border-b border-gray-300">
             <div className="flex items-center space-x-4">
               <button className="p-2 rounded-full hover:bg-gray-100 transition">
-                <Heart onClick={() => handleLike(id)} className="w-7 h-7 text-red-500" />
+                <Heart
+                  onClick={() => handleLike(id)}
+                  className="w-7 h-7 text-red-500"
+                />
               </button>
               <button className="p-2 rounded-full hover:bg-gray-100 transition">
                 <MessageCircle className="w-7 h-7 text-gray-700" />
@@ -150,9 +156,7 @@ const SinglePost = () => {
               {post.likeCount} likes
             </p>
             <p className="text-gray-700 mt-2">
-              <span className="font-bold text-gray-950">
-                {post.userName}
-              </span>{" "}
+              <span className="font-bold text-gray-950">{post.userName}</span>{" "}
               {post.caption}
             </p>
             {/* <p className="text-gray-500 mt-2">
@@ -166,8 +170,13 @@ const SinglePost = () => {
             <div className="flex items-center overflow-hidden border-b border-gray-300 pb-6">
               <Avatar className="w-10 h-10 rounded-full overflow-hidden">
                 <AvatarFallback className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-700">
-                  U
+                  YOU
                 </AvatarFallback>
+                <AvatarImage
+                  src={user.profile}
+                  alt={user._id}
+                  className="object-cover w-full h-full"
+                />
               </Avatar>
               <input
                 type="text"
@@ -184,21 +193,27 @@ const SinglePost = () => {
               </button>
             </div>
             <div className="space-y-4 pt-6">
-              {post && post.commentWithUser.map((comment, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <Avatar className="w-10 h-10 rounded-full overflow-hidden">
-                    <AvatarFallback className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-700">
-                      {comment.user.userName[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-semibold text-gray-800">
-                      {comment.user.userName}
-                    </p>
-                    <p className="text-gray-700">{comment.comment}</p>
+              {post &&
+                post.commentWithUser.map((comment, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <Avatar className="w-10 h-10 rounded-full overflow-hidden">
+                      <AvatarFallback className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-700">
+                        {comment.user.userName[0].toUpperCase()}
+                      </AvatarFallback>
+                      <AvatarImage
+                        src={comment.user.profile}
+                        alt={comment.user._id}
+                        className="object-cover w-full h-full"
+                      />
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold text-gray-800">
+                        {comment.user.userName}
+                      </p>
+                      <p className="text-gray-700">{comment.comment}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>
