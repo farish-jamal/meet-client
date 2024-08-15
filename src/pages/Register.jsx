@@ -14,6 +14,8 @@ import HomeBg from "../assets/3350638.jpg";
 import { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from 'recoil';
+import { userSelectorState } from "../store/selector/userSelctor";
 
 const Register = () => {
   const navigateTo = useNavigate();
@@ -30,6 +32,7 @@ const Register = () => {
     userName: "",
     password: "",
   });
+  const setUser = useSetRecoilState(userSelectorState);
 
   const handleFormValidation = (form, isRegister) => {
     if (isRegister) {
@@ -81,17 +84,14 @@ const Register = () => {
           body: formData,
         }
       );
-      const { data } = await response.json();
+      const data  = await response.json();
 
-      if (!response.ok) {
+      if (response.statusCode !== 201) {
         toast.dismiss(loadingToastId);
         toast.error("Something went wrong");
         return;
       }
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
+      setUser({user: data.data.user, token: data.data.token});
       toast.dismiss(loadingToastId);
       toast.success("Account created successful!");
       setTimeout(() => {
@@ -121,18 +121,13 @@ const Register = () => {
           body: JSON.stringify(loginForm),
         }
       );
-
-      const { data } = await response.json();
-
-      if (!response.ok) {
+      const data = await response.json();
+      if (data.statusCode !== 200) {
         toast.dismiss(loadingToastId);
         toast.error("Username or password is not correct");
         return;
       }
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
+      setUser({user: data.data.user, token: data.data.token});
       toast.dismiss(loadingToastId);
       toast.success("Login successful!");
       setTimeout(() => {

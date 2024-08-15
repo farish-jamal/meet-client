@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 const AddFriend = () => {
  const [people, setPeople] = useState([]);
+ const [addedFriend, setAddedFriend] = useState(false);
 
   const handleGetPeople = async () => {
     try {
@@ -49,7 +50,7 @@ const AddFriend = () => {
         return;
       }
       toast.success("Added to friend list");
-      handleGetPeople();
+      setAddedFriend(!addedFriend)
     } catch (error) {
       toast.error("Internal server error");
     }
@@ -57,7 +58,7 @@ const AddFriend = () => {
 
   useEffect(() => {
     handleGetPeople();
-  }, [people]);
+  }, [addedFriend]);
   return (
    <>
    <Toaster position="top-right" duration="4000" />

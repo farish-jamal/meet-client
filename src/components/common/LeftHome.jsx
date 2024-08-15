@@ -2,8 +2,11 @@ import { Compass, Heart, HomeIcon, PlusSquare } from "lucide-react";
 import { Dropdown } from "./Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userSelectorState } from "../../store/selector/userSelctor";
 
-const LeftHome = ({user}) => {
+const LeftHome = () => {
+  const user = useRecoilValue(userSelectorState);
   return (
     <div className="sticky top-4 left-0 hidden lg:flex flex-col items-start lg:w-1/6 bg-white m-3 p-4 rounded-lg shadow-lg h-[97vh]">
         <Link to="/" className="flex items-center gap-3 mb-6 w-full cursor-pointer hover:bg-blue-500 py-2 px-3 hover:text-white rounded-lg transition-all duration-200">
