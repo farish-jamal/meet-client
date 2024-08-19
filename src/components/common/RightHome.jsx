@@ -61,7 +61,7 @@ const RightHome = () => {
 
   useEffect(() => {
     handleGetPeople();
-  }, [addedFriend]);
+  }, [addedFriend, user]);
   return (
     <>
       <Toaster position="top-right" duration="4000" />

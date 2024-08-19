@@ -3,17 +3,14 @@ import {Button} from "@/components/ui/button"
 import toast from "react-hot-toast";
 import { Skeleton } from "@/components/ui/skeleton"
 import { useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { userSelectorState } from "../../store/selector/userSelctor";
 
 const FriendList = ({userId}) => {
   const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState({});
-
-  const handleGetLocalUser = () => {
-   const userData = localStorage.getItem('user');
-   const userD = JSON.parse(userData);
-   setUser(userD);
-  }
+  const [user, setUser] = useRecoilState(userSelectorState);
+  
 
   const { id } = useParams();
 
@@ -61,9 +58,7 @@ const FriendList = ({userId}) => {
        return;
      }
      const data = await response.json();
-     console.log(data.data.user);
-     localStorage.setItem("user", JSON.stringify(data.data.user));
-     handleGetLocalUser();
+     setUser({user: data.data.user});
    } catch (error) {
      toast.error("Internal server error");
      console.log(error);
@@ -98,8 +93,7 @@ const FriendList = ({userId}) => {
 
   useEffect(() => {
     handleGetAllFriends();
-    handleGetLocalUser();
-  }, []);
+  }, [user]);
 
   return (
    <div className="p-4 h-full">

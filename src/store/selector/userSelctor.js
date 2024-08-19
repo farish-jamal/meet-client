@@ -9,6 +9,7 @@ export const userSelectorState = selector({
   },
   set: ({ set }, newUserData) => {
     const { user, token } = newUserData;
+    console.log(user, token);
     set(userAtomState, user);
     localStorage.setItem("user", JSON.stringify(user));
     if(token) localStorage.setItem("token", token);

@@ -4,19 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Link, useParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import DropDown from "./DropDown";
+import { useRecoilState } from "recoil";
+import { userSelectorState } from "../../store/selector/userSelctor";
 
 const ProfileGrid = () => {
   const [user, setUser] = useState([]);
-  const [userDetail, setUserDetail] = useState({});
   const [loading, setLoading] = useState(false);
   const [likes, setLikes] = useState(0);
   const { id } = useParams();
-
-  const handleGetUserDeatail = () => {
-    const userObj = localStorage.getItem("user");
-    const localUser = JSON.parse(userObj);
-    setUserDetail(localUser);
-  };
+  const [userDetail, setUserDetail] = useRecoilState(userSelectorState);
 
   const handleAllLikes = () => {
     if (user && user.posts && Array.isArray(user.posts)) {
@@ -73,7 +69,7 @@ const ProfileGrid = () => {
         return;
       }
       const data = await response.json();
-      localStorage.setItem("user", JSON.stringify(data.data.user));
+      setUserDetail({user: data.data.user});
       return true;
     } catch (error) {
       toast.error("Internal server error");
@@ -101,7 +97,6 @@ const ProfileGrid = () => {
       toast.success("Added to friend list");
       await handleGetMyProfile();
       await handleGetUser();
-      handleGetUserDeatail();
     } catch (error) {
       toast.error("Internal server error");
     }
@@ -109,8 +104,7 @@ const ProfileGrid = () => {
 
   useEffect(() => {
     handleGetUser();
-    handleGetUserDeatail();
-  }, [id]);
+  }, [id, user]);
   return (
     <div className="flex-1 h-screen lg:mx-4 lg:my-4 bg-white py-4 px-4 mb-20 md:mb-20 lg:px-5 rounded-lg shadow-lg overflow-y-auto no-scrollbar">
       {!loading ? (
