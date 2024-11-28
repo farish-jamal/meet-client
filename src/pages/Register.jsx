@@ -85,10 +85,9 @@ const Register = () => {
         }
       );
       const data  = await response.json();
-
-      if (response.statusCode !== 201) {
+      if (data.statusCode != 201) {
         toast.dismiss(loadingToastId);
-        toast.error("Something went wrong");
+        toast.error("Something went wrong33");
         return;
       }
       setUser({user: data.data.user, token: data.data.token});
